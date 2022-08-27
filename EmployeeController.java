@@ -293,7 +293,7 @@ public class EmployeeController {
                 trainees.add(trainee);
             }
             
-            trainerDtoService.associateEmployeeById(trainerId, trainees);
+            traineeDtoService.associateEmployeeById(trainerId, trainees);
         } else {
            
             logger.info("Enter trainee Id");
@@ -306,7 +306,7 @@ public class EmployeeController {
                 TrainerDto trainer = trainerDtoService.getEmployeeById(trainerId);
                 trainers.add(trainer);
             }
-            traineeDtoService.associateEmployeeById(traineeId, trainers);
+            trainerDtoService.associateEmployeeById(traineeId, trainers);
         }
     }
 }

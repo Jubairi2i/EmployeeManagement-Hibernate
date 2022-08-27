@@ -104,9 +104,9 @@ public class EmployeeServiceImpl<T extends Employee> implements IEmployeeService
     @Override
     public void associateEmployeeById(String employeeId, List<T> employees) {
         if(t instanceof TrainerDto) {
-            trainerDao.associateEmployeeById(employeeId, (List<Trainee>)employees);
+            trainerDao.associateEmployeeById(employeeId, (List<Trainer>) employees);
 	} else {
-            traineeDao.associateEmployeeById(employeeId, (List<Trainer>)employees);
+            traineeDao.associateEmployeeById(employeeId, (List<Trainee>) employees);
         }
     } 
 

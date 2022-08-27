@@ -100,9 +100,9 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
                 Transaction transaction = session.beginTransaction();
 
                 Criteria criteriaTrainer = session.createCriteria(Trainer.class);
-                criteriaTrainer.add(Restrictions.eq("EMPLOYEE_ID",employeeId));
+                criteriaTrainer.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainer.add(Restrictions.ne("isDelete", true));
-                selectedTrainer = criteriaTrainer.list().get(0);
+                selectedTrainer = (Trainer)criteriaTrainer.list().get(0);
               
                 transaction.commit();
             } catch (Exception e) {
@@ -115,9 +115,9 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
                 Transaction transaction = session.beginTransaction();
 
                 Criteria criteriaTrainee = session.createCriteria(Trainee.class);
-                criteriaTrainee.add(Restrictions.eq("EMPLOYEE_ID",employeeId));
-                criteriaTrainer.add(Restrictions.ne("isDelete", true));
-                selectedTrainee = criteriaTrainee.list().get(0);
+                criteriaTrainee.add(Restrictions.eq("employeeId",employeeId));
+                criteriaTrainee.add(Restrictions.ne("isDelete", true));
+                selectedTrainee = (Trainee)criteriaTrainee.list().get(0);
 
                 transaction.commit();
             } catch (Exception e) {
@@ -192,7 +192,6 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
                     trainee.setIsDelete(true);
                     session.update(trainee);
                     transaction.commit();
-                    session.close(); 
                 } catch (Exception e) {
                     e.printStackTrace(); 
                 }
@@ -210,15 +209,19 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
         Transaction transaction = null;
         if(t instanceof Trainer) {
 	    
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            try (Session session = HibernateUtil.getSessionFactory().openSession();) {
                 transaction = session.beginTransaction();
-            
-                Trainer trainer = session.get(Trainer.class, employeeId);
-                if (!trainer.getIsDelete()) {
-                    trainer.setEmployeeMobileNumber(newMobileNumber);
-                    session.update(trainer);
-                    message = "trainer updated";
-                }
+
+                Criteria criteriaTrainer = session.createCriteria(Trainer.class);
+                criteriaTrainer.add(Restrictions.eq("employeeId",employeeId));
+                criteriaTrainer.add(Restrictions.ne("isDelete", true));
+                Trainer trainer = (Trainer)criteriaTrainer.list().get(0);
+                
+                trainer.setEmployeeMobileNumber(newMobileNumber);
+             
+                session.update(trainer);
+                message = "trainer updated";
+                
                 transaction.commit();
             } catch (Exception e) {
                 if (transaction != null) 
@@ -227,16 +230,19 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             } 
 
         } else {
-            
+           
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
             
-                Trainee trainee = session.get(Trainee.class, employeeId);
-                if (!trainee.getIsDelete()) {
-                    trainee.setEmployeeMobileNumber(newMobileNumber);
-                    session.update(trainee);
-                    message = "trainee updated";
-                }
+                Criteria criteriaTrainee = session.createCriteria(Trainee.class);
+                criteriaTrainee.add(Restrictions.eq("employeeId",employeeId));
+                criteriaTrainee.add(Restrictions.ne("isDelete", true));
+                Trainee trainee = (Trainee)criteriaTrainee.list().get(0);
+                
+                trainee.setEmployeeMobileNumber(newMobileNumber);
+                session.update(trainee);
+                message = "trainee updated";
+                
                 transaction.commit(); 
       
             } catch (Exception e) {
@@ -258,7 +264,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
 	
             Trainer selectedTrainer = (Trainer)session.get(Trainer.class, employeeId);
               
-            selectedTrainer.setTrainees(employees);
+            selectedTrainer.setTrainees((List<Trainee>)employees);
             
             session.persist(selectedTrainer);
             transaction.commit(); 
@@ -273,7 +279,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
 
             Trainee selectedTrainees = session.get(Trainee.class, employeeId);
               
-            selectedTrainees.setTrainers(employees  );
+            selectedTrainees.setTrainers((List<Trainer>)employees);
 
             session.persist(selectedTrainees);
             transaction.commit(); 
