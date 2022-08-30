@@ -1,9 +1,9 @@
 package com.i2i.service;
 
-import com.i2i.dto.Employee;
+import com.i2i.dto.EmployeeDto;
 import java.util.List;
 
-public interface IEmployeeService<T extends Employee> {
+public interface IEmployeeService<T extends EmployeeDto> {
 
     /**
      * creates new employee record and adds it in Trainer or Trainee list
@@ -39,7 +39,7 @@ public interface IEmployeeService<T extends Employee> {
      */
     public String updateEmployeeById(String employeeId, long newMobileNumber);
 
-    public void associateEmployeeById(String employeeId, List<T> employees);
+    public void associateEmployeeById(String employeeId, List<EmployeeDto> employees);
 
     public List<T> getAssociateEmployeeById(String employeeId);
 }

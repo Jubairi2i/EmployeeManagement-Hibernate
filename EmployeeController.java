@@ -5,9 +5,10 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
+import com.i2i.entity.Employee;
 import com.i2i.entity.Trainer;
 import com.i2i.entity.Trainee;
-import com.i2i.dto.Employee;
+import com.i2i.dto.EmployeeDto;
 import com.i2i.dto.TrainerDto;
 import com.i2i.dto.TraineeDto;
 import com.i2i.hibernateUtil.HibernateUtil;
@@ -20,6 +21,7 @@ import com.i2i.jdbcConnection.JdbcConnection;
 import com.i2i.exception.ElementNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 public class EmployeeController {
     
@@ -167,7 +169,15 @@ public class EmployeeController {
             }  
         }    
     }
-    
+    /**
+     * Get employee details from UI and pass the details to service
+     *
+     * @param userInput - 1 to get trainer and 2 to get trainee details
+     *
+     * @param employee {@link Trainer} or {@link Trainee} the trainer and trainee
+     *
+     * @return {@link void}
+     */
     public void addEmployee(int userInput) {
 
         scan.nextLine();
@@ -202,32 +212,60 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Display Trainer using Employee Id   
+     * 
+     * @param Trainer Id {@link String}
+     *
+     * @void
+     */
     public void displayTrainerById(String employeeId) {
         TrainerDto trainer = trainerDtoService.getEmployeeById(employeeId);
         logger.info(trainer.toString());
     }
   
+    /**
+      * Display Trainee using Employee Id   
+      * 
+      * @param Trainee Id {@link tring}
+      *
+      * @void
+      */
     public void displayTraineeById(String employeeId) {
         TraineeDto trainee = traineeDtoService.getEmployeeById(employeeId);
         logger.info(trainee.toString());
     }
 
+    /**
+      * Display Associated Employees using Employee Id   
+      * 
+      * @param Trainer Id {@link String}
+      *
+      * @void
+      */
     public void displayAssociateTrainersById() {
         logger.info("Enter Trainer Id");
         String trainerId = scan.nextLine();
-        for (Employee employee : trainerDtoService.getAssociateEmployeeById(trainerId)){
-		if( employee instanceof TrainerDto) {
-        	    logger.info(employee.toString());
-		} else {
-	            logger.info(employee.toString());
-		}
+        for (EmployeeDto employee : trainerDtoService.getAssociateEmployeeById(trainerId)){
+	    if( employee instanceof TrainerDto) {
+        	logger.info(employee.toString());
+            } else {
+	        logger.info(employee.toString());
+	    }
 	}
     }
 
+    /**
+      * Display Associated Employees using Employee Id   
+      * 
+      * @param Trainee Id {@link String}
+      *
+      * @void
+      */
     public void displayAssociateTraineesById() {
         logger.info("Enter Trainee Id");
         String traineeId = scan.nextLine();
-        for (Employee employee : traineeDtoService.getAssociateEmployeeById(traineeId)){
+        for (EmployeeDto employee : traineeDtoService.getAssociateEmployeeById(traineeId)){
 		if( employee instanceof TraineeDto) {
         	    logger.info(employee.toString());
 		} else {
@@ -236,6 +274,11 @@ public class EmployeeController {
 	}
     }
 
+    /**
+      * Display All Trainers using Employee Id   
+      * 
+      * @void
+      */
     public void displayAllTrainers() {
 	
         for(TrainerDto trainer : trainerDtoService.getAllEmployees()) {
@@ -243,6 +286,11 @@ public class EmployeeController {
         }
     }  
 
+    /**
+      * Display All Trainees using Employee Id   
+      *
+      * @void
+      */
     public void displayAllTrainees() {
 
          for(TraineeDto trainee : traineeDtoService.getAllEmployees()) {
@@ -250,6 +298,13 @@ public class EmployeeController {
          }
     }
 
+    /**
+      * Remove Employee using Employee Id   
+      * 
+      * @param Trainer Id {@link String}
+      *
+      * @void
+      */
     public void removeTrainerById() throws ElementNotFoundException {
         logger.info("Enter the Trainer Id you want to remome");
         String trainerIdToRemove = scan.nextLine();
@@ -260,6 +315,13 @@ public class EmployeeController {
         }
     }
 
+    /**
+      * Remove Employees using Employee Id   
+      * 
+      * @param Trainee Id {@link String}
+      *
+      * @void
+      */
     public void removeTraineeById() throws ElementNotFoundException {
         logger.info("Enter the Trainee Id you want to remome");
         String traineeIdToRemove = scan.nextLine();
@@ -271,14 +333,34 @@ public class EmployeeController {
         }
     }
 
+    /**
+      * Update Trainer using Employee Id   
+      * 
+      * @param Trainer Id {@link String}
+      *
+      * @void
+      */
     public String updateTrainerById(String employeeId, long mobileNumber) {
         return trainerDtoService.updateEmployeeById(employeeId, mobileNumber);
     }
 
+    /**
+      * Update Trainee using Employee Id   
+      * 
+      * @param Trainee Id {@link String}
+      *
+      * @void
+      */
     public String updateTraineeById(String employeeId, long mobileNumber) {
         return traineeDtoService.updateEmployeeById(employeeId, mobileNumber);
     }
-    
+    /**
+      * To associate Employee by EmployeeId    
+      * 
+      * @param TrainerId and TraineeId {@link String & link String} TrainerId of the traineer TraineeId of the traineee
+      *
+      * @void
+      */
     public void updateAssociate(int userInput) {
         if (userInput == 1) {
 
@@ -287,7 +369,7 @@ public class EmployeeController {
            
             logger.info("Enter Trainee Ids after comma to associate");
             String[] traineeIds = scan.nextLine().split(",");
-            List<TraineeDto> trainees = new ArrayList<>();
+            List<EmployeeDto> trainees = new ArrayList<>();
             for (String traineeId : traineeIds) {
                 TraineeDto trainee = traineeDtoService.getEmployeeById(traineeId);
                 trainees.add(trainee);
@@ -301,7 +383,7 @@ public class EmployeeController {
             
             logger.info("Enter Trainer Ids after comma to associate");
             String[] trainerIds = scan.nextLine().split(",");
-            List<TrainerDto> trainers = new ArrayList<>();
+            List<EmployeeDto> trainers = new ArrayList<>();
             for (String trainerId : trainerIds) {
                 TrainerDto trainer = trainerDtoService.getEmployeeById(trainerId);
                 trainers.add(trainer);

@@ -1,8 +1,9 @@
 package com.i2i.service.impl;
 
-import com.i2i.dto.Employee;
+import com.i2i.dto.EmployeeDto;
 import com.i2i.dto.TrainerDto;
 import com.i2i.dto.TraineeDto;
+import com.i2i.entity.Employee;
 import com.i2i.entity.Trainer;
 import com.i2i.entity.Trainee;
 import com.i2i.converter.Converter;
@@ -11,7 +12,7 @@ import com.i2i.dao.IEmployeeDao;
 import com.i2i.dao.impl.EmployeeDaoImpl;
 import java.util.List;
 
-public class EmployeeServiceImpl<T extends Employee> implements IEmployeeService<T> {
+public class EmployeeServiceImpl<T extends EmployeeDto> implements IEmployeeService<T> {
 
     private static IEmployeeDao<Trainer> trainerDao = new EmployeeDaoImpl(new Trainer());
     private static IEmployeeDao<Trainee> traineeDao = new EmployeeDaoImpl(new Trainee());
@@ -102,11 +103,11 @@ public class EmployeeServiceImpl<T extends Employee> implements IEmployeeService
      * @return {@link void} 
      */
     @Override
-    public void associateEmployeeById(String employeeId, List<T> employees) {
+    public void associateEmployeeById(String employeeId, List<EmployeeDto> employees) {
         if(t instanceof TrainerDto) {
-            trainerDao.associateEmployeeById(employeeId, (List<Trainer>) employees);
+            trainerDao.associateEmployeeById(employeeId, Converter.convertTrainerDtoListToTrainerList((List<EmployeeDto>)employees));
 	} else {
-            traineeDao.associateEmployeeById(employeeId, (List<Trainee>) employees);
+            traineeDao.associateEmployeeById(employeeId, Converter.convertTraineeDtoListToTraineeList((List<EmployeeDto>)employees));
         }
     } 
 

@@ -2,7 +2,7 @@ package com.i2i.dto;
 
 import java.util.List;
 
-public class TraineeDto extends Employee {
+public class TraineeDto extends EmployeeDto {
 
     private List<TrainerDto> trainers;
 

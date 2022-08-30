@@ -1,6 +1,6 @@
 package com.i2i.dao;
 
-import com.i2i.dto.Employee;
+import com.i2i.entity.Employee;
 import java.util.List;
 
 public interface IEmployeeDao<T extends Employee> {

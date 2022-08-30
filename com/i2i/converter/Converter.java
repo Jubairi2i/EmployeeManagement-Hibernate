@@ -1,12 +1,13 @@
 package com.i2i.converter;
 
+import com.i2i.entity.Employee;
 import com.i2i.entity.Trainer;
 import com.i2i.entity.Trainee;
-import com.i2i.dto.Employee;
+import com.i2i.dto.EmployeeDto;
 import com.i2i.dto.TrainerDto;
 import com.i2i.dto.TraineeDto;
 import java.util.List;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 
 public class Converter {
@@ -53,7 +54,7 @@ public class Converter {
     }
 
     public static List<TraineeDto> convertTraineeList(List<Trainee> trainees) {
-	List<TraineeDto> traineeDtos = new LinkedList();
+	List<TraineeDto> traineeDtos = new ArrayList();
 	TraineeDto traineeDto = null; 
 	for (Trainee trainee : trainees) {
 	    traineeDto = convertTraineeToTraineeDto(trainee);
@@ -63,7 +64,7 @@ public class Converter {
     }
 
     public static List<TrainerDto> convertTrainerList(List<Trainer> trainers) {
-	List<TrainerDto> trainerDtos = new LinkedList();
+	List<TrainerDto> trainerDtos = new ArrayList();
 	TrainerDto trainerDto = null; 
 	for (Trainer trainer : trainers) {
 	    trainerDto = convertTrainerToTrainerDto(trainer);
@@ -72,8 +73,28 @@ public class Converter {
 	return trainerDtos;
     }
 
-    public static List<Employee> convertEmployeeList(List<Employee> employees) {
-	List<Employee> employeeList = new LinkedList();
+    public static List<Trainee> convertTraineeDtoListToTraineeList(List<EmployeeDto> trainees) {
+	List<Trainee> traineeList = new ArrayList();
+	Trainee trainee = null;
+	for (EmployeeDto traineeDto : trainees) {
+	    trainee = convertTraineeDtoToTrainee((TraineeDto)traineeDto);
+            traineeList.add(trainee);
+        }
+	return traineeList;
+    }
+
+    public static List<Trainer> convertTrainerDtoListToTrainerList(List<EmployeeDto> trainers) {
+	List<Trainer> trainerList = new ArrayList();
+	Trainer trainer = null;
+	for (EmployeeDto trainerDto : trainers) {
+	    trainer = convertTrainerDtoToTrainer((TrainerDto)trainerDto);
+            trainerList.add(trainer);
+        }
+	return trainerList;
+    }	
+
+    public static List<EmployeeDto> convertEmployeeList(List<Employee> employees) {
+	List<EmployeeDto> employeeList = new ArrayList();
 	TrainerDto trainerDto = null;
 	TraineeDto traineeDto = null;
 	for (Employee employee : employees) {
@@ -89,3 +110,5 @@ public class Converter {
 	return employeeList;
     }	
 }
+
+

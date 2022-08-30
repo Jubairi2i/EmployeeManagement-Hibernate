@@ -1,6 +1,5 @@
 package com.i2i.entity;
 
-import com.i2i.dto.Employee;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -11,10 +10,29 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+@NamedQueries(  
+    {  
+        @NamedQuery(  
+        name = "getAllTrainee",  
+        query = "from Trainee trainee where trainee.isDelete = false"  
+        ),
+        @NamedQuery(  
+        name = "getTraineeById",  
+        query = "from Trainee trainee where trainee.employeeId = :employeeId and trainee.isDelete = false" 
+        ),
+        @NamedQuery(  
+        name = "updateTraineeById",  
+        query = "from Trainee trainee where trainee.employeeId = :employeeId"  
+        )  
+    }  
+)  
 
 @Entity
 @Table(name = "TRAINEE_TABLE")

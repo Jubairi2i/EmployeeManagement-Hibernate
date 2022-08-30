@@ -1,8 +1,9 @@
 package com.i2i.dao.impl;
 
-import com.i2i.dto.Employee;
+import com.i2i.dto.EmployeeDto;
 import com.i2i.dto.TrainerDto;
 import com.i2i.dto.TraineeDto;
+import com.i2i.entity.Employee;
 import com.i2i.entity.Trainer;
 import com.i2i.entity.Trainee;
 import com.i2i.dao.IEmployeeDao;
@@ -24,7 +25,7 @@ import java.sql.Date;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import org.hibernate.Query;
 import javax.persistence.TypedQuery;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -59,9 +60,12 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 Transaction transaction = session.beginTransaction();
 
-                Criteria criteriaTrainer = session.createCriteria(Trainer.class);
+                Query query = session.getNamedQuery("getAllTrainer");    
+                trainers = query.list();   
+
+                /*Criteria criteriaTrainer = session.createCriteria(Trainer.class);
                 criteriaTrainer.add(Restrictions.ne("isDelete",true));
-                trainers = criteriaTrainer.list();
+                trainers = criteriaTrainer.list();*/
                 transaction.commit();
                 
             } catch (Exception e) {
@@ -74,9 +78,12 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 Transaction transaction = session.beginTransaction();
             
-                Criteria criteriaTrainee = session.createCriteria(Trainee.class);
+                Query query = session.getNamedQuery("getAllTrainee");    
+                trainees = query.list();
+
+                /*Criteria criteriaTrainee = session.createCriteria(Trainee.class);
                 criteriaTrainee.add(Restrictions.ne("isDelete",true));
-                trainees = criteriaTrainee.list();
+                trainees = criteriaTrainee.list();*/
                 transaction.commit();
                     
             } catch (Exception e) {
@@ -99,10 +106,17 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 Transaction transaction = session.beginTransaction();
 
-                Criteria criteriaTrainer = session.createCriteria(Trainer.class);
+                List<Trainer> trainers = session.createNamedQuery("getTrainerById", Trainer.class)    
+                                        .setParameter("employeeId", employeeId).getResultList();   
+
+                for (Trainer trainer : trainers) {
+                    selectedTrainer = trainer;
+                }
+
+                /*Criteria criteriaTrainer = session.createCriteria(Trainer.class);
                 criteriaTrainer.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainer.add(Restrictions.ne("isDelete", true));
-                selectedTrainer = (Trainer)criteriaTrainer.list().get(0);
+                selectedTrainer = (Trainer)criteriaTrainer.list().get(0);*/
               
                 transaction.commit();
             } catch (Exception e) {
@@ -114,10 +128,17 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 Transaction transaction = session.beginTransaction();
 
-                Criteria criteriaTrainee = session.createCriteria(Trainee.class);
+                List<Trainee> trainees = session.createNamedQuery("getTraineeById", Trainee.class)    
+                                        .setParameter("employeeId", employeeId).getResultList();   
+
+                for (Trainee trainee : trainees) {
+                    selectedTrainee = trainee;
+                }
+
+                /*Criteria criteriaTrainee = session.createCriteria(Trainee.class);
                 criteriaTrainee.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainee.add(Restrictions.ne("isDelete", true));
-                selectedTrainee = (Trainee)criteriaTrainee.list().get(0);
+                selectedTrainee = (Trainee)criteriaTrainee.list().get(0);*/
 
                 transaction.commit();
             } catch (Exception e) {
@@ -211,21 +232,26 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
 	    
             try (Session session = HibernateUtil.getSessionFactory().openSession();) {
                 transaction = session.beginTransaction();
+                
+                Query updateTrainer = session.createNamedQuery("updateTrainerById");
+                updateTrainer.setParameter("employeeId",employeeId);
+                updateTrainer.setParameter("employeeMobileNumber", newMobileNumber);
+                updateTrainer.executeUpdate();
 
-                Criteria criteriaTrainer = session.createCriteria(Trainer.class);
+                /*Criteria criteriaTrainer = session.createCriteria(Trainer.class);
                 criteriaTrainer.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainer.add(Restrictions.ne("isDelete", true));
                 Trainer trainer = (Trainer)criteriaTrainer.list().get(0);
                 
                 trainer.setEmployeeMobileNumber(newMobileNumber);
              
-                session.update(trainer);
+                session.update(trainer);*/
                 message = "trainer updated";
                 
                 transaction.commit();
             } catch (Exception e) {
-                if (transaction != null) 
-                    transaction.rollback();
+                //if (transaction != null) 
+                  //  transaction.rollback();
                 e.printStackTrace(); 
             } 
 
@@ -234,50 +260,69 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
             
-                Criteria criteriaTrainee = session.createCriteria(Trainee.class);
+                Query updateTrainee = session.createNamedQuery("updateTraineeById");
+                updateTrainee.setParameter("employeeId",employeeId);
+                updateTrainee.setParameter("employeeMobileNumber", newMobileNumber);
+                updateTrainee.executeUpdate();
+
+                /*Criteria criteriaTrainee = session.createCriteria(Trainee.class);
                 criteriaTrainee.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainee.add(Restrictions.ne("isDelete", true));
                 Trainee trainee = (Trainee)criteriaTrainee.list().get(0);
                 
                 trainee.setEmployeeMobileNumber(newMobileNumber);
-                session.update(trainee);
+                session.update(trainee);*/
                 message = "trainee updated";
                 
                 transaction.commit(); 
       
             } catch (Exception e) {
-                    if (transaction != null) 
-                        transaction.rollback();
+                   // if (transaction != null) 
+                     //   transaction.rollback();
                     e.printStackTrace(); 
             }
         }
         return message;
     }      
 
+    /**
+     * Used to associate Employee by EmployeeId
+     * @param TrainerId and TraineeId {@link String & link String} TrainerId of the traineer TraineeId of the traineee 
+     * @return {@link void} 
+     */
     @Override
     public void associateEmployeeById(String employeeId, List<T> employees) {
         
-        if(t instanceof Trainer) {
+        if(t instanceof Trainee) {
 	    
             Session session = HibernateUtil.getSessionFactory().openSession();
             Transaction transaction = session.beginTransaction(); 
+
+            Criteria criteriaTrainer = session.createCriteria(Trainer.class);
+            criteriaTrainer.add(Restrictions.eq("employeeId",employeeId));
+            criteriaTrainer.add(Restrictions.ne("isDelete", true));
+            Trainer selectedTrainer = (Trainer)criteriaTrainer.list().get(0);
 	
-            Trainer selectedTrainer = (Trainer)session.get(Trainer.class, employeeId);
+            //Trainer selectedTrainer = (Trainer)session.get(Trainer.class, employeeId);
               
             selectedTrainer.setTrainees((List<Trainee>)employees);
             
             session.persist(selectedTrainer);
             transaction.commit(); 
             session.close();
-            System.out.println(selectedTrainer.toString());
-            logger.info(selectedTrainer.toString());
+            //System.out.println(selectedTrainer.toString());
+            //logger.info(selectedTrainer.toString());
       
             
         } else {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();   
+            Transaction transaction = session.beginTransaction();  
 
-            Trainee selectedTrainees = session.get(Trainee.class, employeeId);
+            Criteria criteriaTrainee = session.createCriteria(Trainee.class);
+            criteriaTrainee.add(Restrictions.ne("isDelete",true));
+            Trainee selectedTrainees = (Trainee)criteriaTrainee.list().get(0); 
+
+            //Trainee selectedTrainees = session.get(Trainee.class, employeeId);
               
             selectedTrainees.setTrainers((List<Trainer>)employees);
 
@@ -287,6 +332,11 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
         }
     } 
 
+    /**
+     * Used to get the Associated Employee by EmployeeId
+     * @param EmployeeId {@link String} EmployeeId of the trainer or trainee
+     * @return {@link Trainer or link Trainee} the trainer or trainee object
+     */
     @Override
     public List<T> retriveAssociate(String employeeId) {
 

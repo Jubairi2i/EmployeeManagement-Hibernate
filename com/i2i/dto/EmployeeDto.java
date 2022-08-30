@@ -3,34 +3,14 @@ package com.i2i.dto;
 import java.time.LocalDate;
 import java.time.Period;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+public class EmployeeDto {
 
-@MappedSuperclass
-public class Employee {
-
-    
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "SLNO")
-    private int slNo;
-    //@Column(name = "EMPLOYEE_ID", columnDefinition = "varchar(80)")
-    @Column(name = "EMPLOYEE_ID")
     private String employeeId;
-    @Column(name = "NAME")
     private String employeeName;
-    @Column(name = "DATE_OF_BIRTH")
     private LocalDate employeeDateOfBirth;
-    @Column(name = "DATE_OF_JOINING")
     private LocalDate employeeDateOfJoining;
-    @Column(name = "MOBILE_NUMBER")
     private long employeeMobileNumber;
-    @Column(name = "COMPANY_NAME")
     private final static String companyName = "Ideas2IT";
-    @Column(name = "IS_DELETE")
     private boolean isDelete = false;
 
     public String getCompanyName() {
