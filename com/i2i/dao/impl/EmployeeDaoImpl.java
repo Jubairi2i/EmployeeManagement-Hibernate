@@ -233,25 +233,25 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession();) {
                 transaction = session.beginTransaction();
                 
-                Query updateTrainer = session.createNamedQuery("updateTrainerById");
+                /*Query updateTrainer = session.createNamedQuery("updateTrainerById");
                 updateTrainer.setParameter("employeeId",employeeId);
                 updateTrainer.setParameter("employeeMobileNumber", newMobileNumber);
-                updateTrainer.executeUpdate();
+                updateTrainer.executeUpdate();*/
 
-                /*Criteria criteriaTrainer = session.createCriteria(Trainer.class);
+                Criteria criteriaTrainer = session.createCriteria(Trainer.class);
                 criteriaTrainer.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainer.add(Restrictions.ne("isDelete", true));
                 Trainer trainer = (Trainer)criteriaTrainer.list().get(0);
                 
                 trainer.setEmployeeMobileNumber(newMobileNumber);
              
-                session.update(trainer);*/
+                session.update(trainer);
                 message = "trainer updated";
                 
                 transaction.commit();
             } catch (Exception e) {
-                //if (transaction != null) 
-                  //  transaction.rollback();
+                if (transaction != null) 
+                    transaction.rollback();
                 e.printStackTrace(); 
             } 
 
@@ -260,26 +260,26 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
             
-                Query updateTrainee = session.createNamedQuery("updateTraineeById");
+                /*Query updateTrainee = session.createNamedQuery("updateTraineeById");
                 updateTrainee.setParameter("employeeId",employeeId);
                 updateTrainee.setParameter("employeeMobileNumber", newMobileNumber);
-                updateTrainee.executeUpdate();
+                updateTrainee.executeUpdate();*/
 
-                /*Criteria criteriaTrainee = session.createCriteria(Trainee.class);
+                Criteria criteriaTrainee = session.createCriteria(Trainee.class);
                 criteriaTrainee.add(Restrictions.eq("employeeId",employeeId));
                 criteriaTrainee.add(Restrictions.ne("isDelete", true));
                 Trainee trainee = (Trainee)criteriaTrainee.list().get(0);
                 
                 trainee.setEmployeeMobileNumber(newMobileNumber);
-                session.update(trainee);*/
+                session.update(trainee);
                 message = "trainee updated";
                 
                 transaction.commit(); 
       
             } catch (Exception e) {
-                   // if (transaction != null) 
-                     //   transaction.rollback();
-                    e.printStackTrace(); 
+                if (transaction != null) 
+                    transaction.rollback();
+                e.printStackTrace(); 
             }
         }
         return message;
@@ -307,7 +307,7 @@ public class EmployeeDaoImpl<T extends Employee> implements IEmployeeDao<T> {
               
             selectedTrainer.setTrainees((List<Trainee>)employees);
             
-            session.persist(selectedTrainer);
+            session.update(selectedTrainer);
             transaction.commit(); 
             session.close();
             //System.out.println(selectedTrainer.toString());

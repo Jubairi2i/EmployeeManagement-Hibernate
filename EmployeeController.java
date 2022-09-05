@@ -36,7 +36,7 @@ public class EmployeeController {
         employeeController.init();
        
     }
-    public void init(){
+    public void init() {
         
         boolean flag = true;
 	while(flag) {
@@ -124,8 +124,8 @@ public class EmployeeController {
                                case 2:
                                    displayAllTrainees();
                                    break;
-                     }
-                     break;
+                           }
+                           break;
 
                        case 2:
                            logger.info("Enter 1 for Trainer and Enter 2 for Trainee ");
@@ -246,13 +246,9 @@ public class EmployeeController {
     public void displayAssociateTrainersById() {
         logger.info("Enter Trainer Id");
         String trainerId = scan.nextLine();
-        for (EmployeeDto employee : trainerDtoService.getAssociateEmployeeById(trainerId)){
-	    if( employee instanceof TrainerDto) {
-        	logger.info(employee.toString());
-            } else {
-	        logger.info(employee.toString());
-	    }
-	}
+        TrainerDto trainer = trainerDtoService.getAssociateEmployeeById(trainerId);
+        logger.info(trainer.toString());
+        
     }
 
     /**
@@ -265,13 +261,8 @@ public class EmployeeController {
     public void displayAssociateTraineesById() {
         logger.info("Enter Trainee Id");
         String traineeId = scan.nextLine();
-        for (EmployeeDto employee : traineeDtoService.getAssociateEmployeeById(traineeId)){
-		if( employee instanceof TraineeDto) {
-        	    logger.info(employee.toString());
-		} else {
-	            logger.info(employee.toString());
-		}
-	}
+        TraineeDto trainee = traineeDtoService.getAssociateEmployeeById(traineeId);
+        logger.info(trainee.toString());
     }
 
     /**

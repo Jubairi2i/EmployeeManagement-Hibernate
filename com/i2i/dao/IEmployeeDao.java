@@ -40,7 +40,17 @@ public interface IEmployeeDao<T extends Employee> {
      */
     public String updateEmployeeById(String employeeId, long newMobileNumber);
 
+    /**
+     * Used to associate Employee by EmployeeId
+     * @param TrainerId and TraineeId {@link String & link String} TrainerId of the traineer TraineeId of the traineee 
+     * @return {@link void} 
+     */
     public void associateEmployeeById(String employeeId, List<T> employees);
 
+    /**
+     * Used to get the Associated Employee by EmployeeId
+     * @param EmployeeId {@link String} EmployeeId of the trainer or trainee
+     * @return {@link Trainer or link Trainee} the trainer or trainee object
+     */
     public List<T> retriveAssociate(String employeeId);
 }

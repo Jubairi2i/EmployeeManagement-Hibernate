@@ -117,13 +117,20 @@ public class EmployeeServiceImpl<T extends EmployeeDto> implements IEmployeeServ
      * @return {@link Trainer or link Trainee} the trainer or trainee object
      */
     @Override
-    public List<T> getAssociateEmployeeById(String employeeId) {
+    public T getAssociateEmployeeById(String employeeId) {
+        
         if(t instanceof TrainerDto) {
-            List<TrainerDto> trainers = Converter.convertTrainerList((List<Trainer>)trainerDao.retriveAssociate(employeeId));
-            return (List<T>)trainers;
+            Trainer trainer = trainerDao.retrieveEmployeeById(employeeId);
+            List<TraineeDto> trainees = Converter.convertTraineeListToTraineeDtoList(trainer.getTrainees());
+            TrainerDto trainerDto = Converter.convertTrainerToTrainerDto(trainer);
+            trainerDto.setTrainees(trainees);
+            return (T) trainerDto;
 	} else {
-            List<TraineeDto> trainees = Converter.convertTraineeList((List<Trainee>)traineeDao.retriveAssociate(employeeId));
-            return (List<T>)trainees;
+            Trainee trainee = traineeDao.retrieveEmployeeById(employeeId);
+            List<TrainerDto> trainers = Converter.convertTrainerListToTrainerDtoList(trainee.getTrainers());
+            TraineeDto traineeDto = Converter.convertTraineeToTraineeDto(trainee);
+            traineeDto.setTrainers(trainers);
+            return (T) traineeDto;
 	} 
     }         
 }	    

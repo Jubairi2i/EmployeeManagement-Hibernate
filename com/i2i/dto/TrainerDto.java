@@ -19,7 +19,7 @@ public class TrainerDto extends EmployeeDto {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(super.toString())
                       .append("\n")
-                      .append(getTrainees());
+                      .append(this.getTrainees());
         return stringBuilder.toString();
     }
 }

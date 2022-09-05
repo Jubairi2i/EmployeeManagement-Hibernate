@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -29,7 +30,7 @@ import javax.persistence.Table;
         ),
         @NamedQuery(  
         name = "updateTraineeById",  
-        query = "from Trainee trainee where trainee.employeeId = :employeeId"  
+        query = "Update Trainee trainee set trainee.employeeMobileNumber =:newMobileNumber where trainee.employeeId = :employeeId and trainee.isDelete = false"  
         )  
     }  
 )  
@@ -38,7 +39,7 @@ import javax.persistence.Table;
 @Table(name = "TRAINEE_TABLE")
 public class Trainee extends Employee {
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "trainees")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "trainees")
     private List<Trainer> trainers = new ArrayList<>();
 
     public List<Trainer> getTrainers() {

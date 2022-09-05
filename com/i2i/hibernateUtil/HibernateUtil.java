@@ -16,7 +16,7 @@ public class HibernateUtil {
 
     public static SessionFactory sessionFactory;
     private Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
-     
+    
     private  HibernateUtil() {
            
     }

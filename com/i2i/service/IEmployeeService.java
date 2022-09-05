@@ -41,5 +41,5 @@ public interface IEmployeeService<T extends EmployeeDto> {
 
     public void associateEmployeeById(String employeeId, List<EmployeeDto> employees);
 
-    public List<T> getAssociateEmployeeById(String employeeId);
+    public T getAssociateEmployeeById(String employeeId);
 }
